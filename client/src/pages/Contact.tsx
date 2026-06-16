@@ -49,7 +49,7 @@ export default function Contact() {
   alert("handleSubmit 有執行");
 
   try {
-    const response = await fetch(
+    await fetch(
       "https://script.google.com/macros/s/AKfycbzelxB6ec8jWhb8fiNC4ZYzQNtEj4MXlxqhK03UkNLw0hic-Eqb_pBS2qbkn-uGRlmv/exec",
       {
         method: "POST",
@@ -57,19 +57,26 @@ export default function Contact() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          country: formData.country,
+          subject: formData.subject,
+          message: formData.message,
+        }),
       }
     );
 
-    if (!response.ok) {
-      throw new Error("送出失敗");
-    }
+    console.log("Google Sheet 已送出");
 
     setSubmitted(true);
 
     toast.success("訊息已成功送出！我們將在3個工作天內回覆您。");
+
   } catch (error) {
-    console.error(error);
+    console.error("送出失敗", error);
+
     toast.error("送出失敗，請稍後再試。");
   }
 };
