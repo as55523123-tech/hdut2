@@ -46,7 +46,7 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
-  alert("handleSubmit 有執行");
+
 
   try {
     await fetch(
