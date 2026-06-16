@@ -43,14 +43,33 @@ export default function Contact() {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simulate form submission
-    setTimeout(() => {
-      setSubmitted(true);
-      toast.success("訊息已成功送出！我們將在3個工作天內回覆您。");
-    }, 500);
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch(
+      "https://script.google.com/macros/s/AKfycbzelxB6ec8jWhb8fiNC4ZYzQNtEj4MXlxqhK03UkNLw0hic-Eqb_pBS2qbkn-uGRlmv/exec",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("送出失敗");
+    }
+
+    setSubmitted(true);
+
+    toast.success("訊息已成功送出！我們將在3個工作天內回覆您。");
+  } catch (error) {
+    console.error(error);
+    toast.error("送出失敗，請稍後再試。");
+  }
+};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
